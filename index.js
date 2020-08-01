@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const url = require("url");
 const { dirname } = require("path");
+const log = console.log;
 
 const data = fs.readFileSync(`${__dirname}/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
@@ -27,24 +28,36 @@ const replaceTemplate = (temp, product) => {
 };
 
 const server = http.createServer((req, res) => {
-    let pathName = req.url;
+    const {query, pathname} = url.parse(req.url, true);
 
-    if (pathName === "/api") {
+    /* Basic router */
+    // api
+    if (pathname === "/api") {
         res.writeHead(200, { "Content-type": "application/json" });
         res.end(data);
-    } else if (pathName === "/" || pathName === "/overview") {
+
+    // main page
+    } else if (pathname === "/" || pathname === "/overview") {
         res.writeHead(200, { "Content-type": "text/html" });
 
         const cardsHtml = dataObj.map(el => replaceTemplate(htmlTemplates.card, el)).join("\n\n");
         const outputHtml = htmlTemplates.overview.replace(/{%PRODUCT_CARDS%}/g, cardsHtml);
 
         res.end(outputHtml);
-    } else if (pathName === "/product") {
-        res.end("/product");
+
+    // certain product
+    } else if (pathname === "/product") {
+        res.writeHead(200, { "Content-type": "text/html" });
+        const product = dataObj[query.id];
+        const output = replaceTemplate(htmlTemplates.product, product);
+
+        res.end(output);
+
+    // unknown pathname
     } else {
         res.writeHead(404);
         res.end("page was not found");
     }
 });
 
-server.listen(8000, () => console.log("Server has been started"));
+server.listen(8000);
