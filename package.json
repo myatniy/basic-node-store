@@ -1,0 +1,24 @@
+{
+  "name": "basic-node-store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index.js -e js,html,json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myatniy/basic-node-store.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/myatniy/basic-node-store/issues"
+  },
+  "homepage": "https://github.com/myatniy/basic-node-store#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
